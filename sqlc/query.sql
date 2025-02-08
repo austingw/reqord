@@ -1,11 +1,9 @@
 -- name: ListAllRequests :many
-SELECT *, (SELECT COUNT(*) FROM requests) AS total_count) 
-FROM requests
+SELECT * FROM requests
 ORDER BY name;
 
 -- name: ListProjectRequests :many
-SELECT *, (SELECT COUNT(*) FROM requests) AS total_count 
-FROM requests
+SELECT * FROM requests
 WHERE project_id = ?
 ORDER BY name;
 
@@ -29,7 +27,7 @@ RETURNING *;
 
 -- name: UpdateRequest :exec
 UPDATE requests
-set name = ?,
+set name = ?
 WHERE id = ?;
 
 -- name: DeleteRequest :exec
@@ -37,8 +35,7 @@ DELETE FROM requests
 WHERE id = ?;
 
 -- name: ListAllProjects :many
-SELECT *, (SELECT COUNT(*) FROM requests) AS total_count) 
-FROM projects
+SELECT * FROM projects
 ORDER BY name;
 
 -- name: CreateProject :one
