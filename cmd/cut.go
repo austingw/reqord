@@ -5,7 +5,8 @@ package cmd
 
 import (
 	"context"
-	"log"
+	"fmt"
+	"strings"
 
 	"github.com/austingw/reqord/db"
 	utils "github.com/austingw/reqord/internal"
@@ -23,18 +24,18 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		reqName, reqCurl := args[0], args[1]
+		reqName, reqCurl := args[0], strings.Join(args[1:], " ")
 
 		ctx := context.Background()
 		queries, err := db.GetQueries()
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
 			return
 		}
 
 		parsedReq, err := utils.ParseCurl(reqCurl)
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
 			return
 		}
 
@@ -48,11 +49,11 @@ to quickly create a Cobra application.`,
 			// Body:      parsedReq.Body,
 		})
 		if err != nil {
-			log.Println(err)
+			fmt.Println(err)
 			return
 		}
 
-		log.Println("Sucessfully created request: " + insertedReq.Name)
+		fmt.Println("Sucessfully created request: " + insertedReq.Name)
 	},
 }
 
