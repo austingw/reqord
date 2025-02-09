@@ -16,8 +16,16 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 package main
 
-import "github.com/austingw/reqord/cmd"
+import (
+	"log"
+
+	"github.com/austingw/reqord/cmd"
+	"github.com/austingw/reqord/db"
+)
 
 func main() {
+	if err := db.InitDB(); err != nil {
+		log.Fatal(err)
+	}
 	cmd.Execute()
 }
