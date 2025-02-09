@@ -11,7 +11,7 @@ import (
 //go:embed schema.sql
 var ddl string
 
-func initDB() error {
+func InitDB() error {
 	ctx := context.Background()
 
 	// will allow user to set db location via flag on init
@@ -26,4 +26,14 @@ func initDB() error {
 	}
 
 	return nil
+}
+
+func GetQueries() (*Queries, error) {
+	database, err := sql.Open("sqlite", "file:reqord.db")
+	if err != nil {
+		return nil, err
+	}
+
+	queries := New(database)
+	return queries, nil
 }
