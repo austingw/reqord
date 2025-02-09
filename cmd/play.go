@@ -14,10 +14,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// spinCmd represents the spin command
-var spinCmd = &cobra.Command{
-	Use:   "spin",
-	Short: "A brief description of your command",
+// playCmd represents the play command
+var playCmd = &cobra.Command{
+	Use:     "play",
+	Aliases: []string{"run"},
+	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -25,7 +26,6 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("spin called")
 		ctx := context.Background()
 		queries, err := db.GetQueries()
 		if err != nil {
@@ -53,15 +53,15 @@ to quickly create a Cobra application.`,
 }
 
 func init() {
-	rootCmd.AddCommand(spinCmd)
+	rootCmd.AddCommand(playCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// spinCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// playCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// spinCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// playCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
