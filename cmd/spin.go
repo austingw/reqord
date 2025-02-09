@@ -1,12 +1,16 @@
 /*
 Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
+	"context"
 	"fmt"
+	"os"
+	"os/exec"
+	"strings"
 
+	"github.com/austingw/reqord/db"
 	"github.com/spf13/cobra"
 )
 
@@ -22,6 +26,29 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("spin called")
+		ctx := context.Background()
+		queries, err := db.GetQueries()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		request, err := queries.GetRequest(ctx, db.GetRequestParams{
+			ProjectID: 1,
+			Name:      args[0],
+		})
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		fmt.Println(request)
+		fields := strings.Fields(request.Curl)
+		curlCmd := exec.Command(fields[0], fields[1:]...)
+		curlCmd.Stdout = os.Stdout
+		curlCmd.Stderr = os.Stderr
+		err = curlCmd.Run()
+		if err != nil {
+			fmt.Println("Curl request failed with %s\n", err)
+		}
 	},
 }
 
