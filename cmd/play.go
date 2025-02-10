@@ -6,7 +6,6 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"os"
 	"os/exec"
 	"strings"
 
@@ -40,15 +39,16 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		}
-		fmt.Println(request)
+		// TODO: Add cool styling for req/res output
+		fmt.Println("Request:\n" + request.Curl + "\n")
 		fields := strings.Fields(request.Curl)
+		fields = append(fields, "-s", "-v")
 		curlCmd := exec.Command(fields[0], fields[1:]...)
-		curlCmd.Stdout = os.Stdout
-		curlCmd.Stderr = os.Stderr
-		err = curlCmd.Run()
+		output, err := curlCmd.CombinedOutput()
 		if err != nil {
-			fmt.Println("Curl request failed with %s\n", err)
+			fmt.Printf("Curl request failed with %s\n", err)
 		}
+		fmt.Println("Response:\n" + string(output))
 	},
 }
 
