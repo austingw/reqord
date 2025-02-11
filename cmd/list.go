@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var All bool
+
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Use:   "list",
@@ -22,6 +24,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(All)
 		ctx := context.Background()
 		queries, err := db.GetQueries()
 		if err != nil {
@@ -29,7 +32,13 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		reqList, err := queries.ListProjectRequests(ctx, 1)
+		var reqList []db.Request
+		if All {
+			reqList, err = queries.ListAllRequests(ctx)
+		} else {
+			reqList, err = queries.ListProjectRequests(ctx, 1)
+		}
+
 		for _, r := range reqList {
 			// just print for now, we'll add bubble tea component later
 			fmt.Println(r)
@@ -49,4 +58,6 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+
+	listCmd.Flags().BoolVarP(&All, "all", "a", false, "Lists all requests across ALL projects")
 }
