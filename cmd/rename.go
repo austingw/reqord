@@ -33,7 +33,9 @@ to quickly create a Cobra application.`,
 			ProjectID: 1,
 		})
 		if err != nil {
-			fmt.Println(err)
+			if err.Error() == "sql: no rows in result set" {
+				fmt.Printf("Command %s not found\n", args[0])
+			}
 			return
 		}
 		err = queries.UpdateRequest(ctx, db.UpdateRequestParams{
@@ -44,7 +46,7 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		}
-		fmt.Println("Sucessfully renamed", args[0], "to", args[1])
+		fmt.Printf("Sucessfully renamed %s to %s\n", args[0], args[1])
 	},
 }
 
