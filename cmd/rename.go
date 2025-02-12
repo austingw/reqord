@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// TODO: Add flag for renaming project? Probably --proj -p?
+
 // renameCmd represents the rename command
 var renameCmd = &cobra.Command{
 	Use:   "rename",
