@@ -33,6 +33,7 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		}
+
 		// check for existing cmd name
 		request, err := queries.GetRequest(ctx, db.GetRequestParams{
 			ProjectID: 1,
