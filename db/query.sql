@@ -38,6 +38,10 @@ WHERE id = ?;
 SELECT * FROM projects
 ORDER BY name;
 
+-- name: GetProject :one
+SELECT * FROM projects
+WHERE name = ? LIMIT 1;
+
 -- name: CreateProject :one
 INSERT INTO projects (name) VALUES (?)
 RETURNING *;
@@ -51,5 +55,8 @@ WHERE id = ?;
 DELETE FROM projects
 WHERE id = ?;
 
--- name: SelectProject :exec
+-- name: SetSelectedProject :exec
 INSERT OR REPLACE INTO selected_project (rowid, project_id) VALUES (1, ?);
+
+-- name: GetSelectedProject :one
+SELECT * FROM selected_project LIMIT 1;

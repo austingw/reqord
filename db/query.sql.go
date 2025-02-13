@@ -93,6 +93,18 @@ func (q *Queries) DeleteRequest(ctx context.Context, id int64) error {
 	return err
 }
 
+const getProject = `-- name: GetProject :one
+SELECT id, name, created_at FROM projects
+WHERE name = ? LIMIT 1
+`
+
+func (q *Queries) GetProject(ctx context.Context, name string) (Project, error) {
+	row := q.db.QueryRowContext(ctx, getProject, name)
+	var i Project
+	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
+	return i, err
+}
+
 const getRequest = `-- name: GetRequest :one
 SELECT id, project_id, name, curl, method, url, headers, body, created_at, updated_at FROM requests
 WHERE project_id = ? AND name = ? LIMIT 1
@@ -119,6 +131,17 @@ func (q *Queries) GetRequest(ctx context.Context, arg GetRequestParams) (Request
 		&i.UpdatedAt,
 	)
 	return i, err
+}
+
+const getSelectedProject = `-- name: GetSelectedProject :one
+SELECT project_id FROM selected_project LIMIT 1
+`
+
+func (q *Queries) GetSelectedProject(ctx context.Context) (int64, error) {
+	row := q.db.QueryRowContext(ctx, getSelectedProject)
+	var project_id int64
+	err := row.Scan(&project_id)
+	return project_id, err
 }
 
 const listAllProjects = `-- name: ListAllProjects :many
@@ -228,12 +251,12 @@ func (q *Queries) ListProjectRequests(ctx context.Context, projectID int64) ([]R
 	return items, nil
 }
 
-const selectProject = `-- name: SelectProject :exec
+const setSelectedProject = `-- name: SetSelectedProject :exec
 INSERT OR REPLACE INTO selected_project (rowid, project_id) VALUES (1, ?)
 `
 
-func (q *Queries) SelectProject(ctx context.Context, projectID int64) error {
-	_, err := q.db.ExecContext(ctx, selectProject, projectID)
+func (q *Queries) SetSelectedProject(ctx context.Context, projectID int64) error {
+	_, err := q.db.ExecContext(ctx, setSelectedProject, projectID)
 	return err
 }
 
