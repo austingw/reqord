@@ -33,6 +33,15 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		}
+		// check for existing cmd name
+		request, err := queries.GetRequest(ctx, db.GetRequestParams{
+			ProjectID: 1,
+			Name:      args[0],
+		})
+		if err == nil {
+			fmt.Printf("A request named %s already exists for your current project\n", request.Name)
+			return
+		}
 
 		parsedReq, err := utils.ParseCurl(reqCurl)
 		if err != nil {
