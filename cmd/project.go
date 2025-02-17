@@ -35,12 +35,12 @@ to quickly create a Cobra application.`,
 
 		if len(args) == 0 {
 			// just running the project command returns current project name
-			currentId, err := queries.GetSelectedProject(ctx)
+			currId, err := queries.GetSelectedProject(ctx)
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
-			currProj, err := queries.GetProjectById(ctx, currentId)
+			currProj, err := queries.GetProjectById(ctx, currId)
 			if err != nil {
 				fmt.Println(err)
 				return
