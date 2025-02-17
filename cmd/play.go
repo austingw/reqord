@@ -31,8 +31,15 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		}
+
+		currId, err := queries.GetSelectedProject(ctx)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		request, err := queries.GetRequest(ctx, db.GetRequestParams{
-			ProjectID: 1,
+			ProjectID: currId,
 			Name:      args[0],
 		})
 		if err != nil {

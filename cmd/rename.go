@@ -30,9 +30,16 @@ to quickly create a Cobra application.`,
 			fmt.Println(err)
 			return
 		}
+
+		currId, err := queries.GetSelectedProject(ctx)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		request, err := queries.GetRequest(ctx, db.GetRequestParams{
 			Name:      args[0],
-			ProjectID: 1,
+			ProjectID: currId,
 		})
 		if err != nil {
 			if err.Error() == "sql: no rows in result set" {

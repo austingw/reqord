@@ -26,9 +26,15 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		reqName, reqCurl := args[0], strings.Join(args[1:], " ")
-
 		ctx := context.Background()
+
 		queries, err := db.GetQueries()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		currId, err := queries.GetSelectedProject(ctx)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -36,7 +42,7 @@ to quickly create a Cobra application.`,
 
 		// check for existing cmd name
 		request, err := queries.GetRequest(ctx, db.GetRequestParams{
-			ProjectID: 1,
+			ProjectID: currId,
 			Name:      args[0],
 		})
 		if err == nil {

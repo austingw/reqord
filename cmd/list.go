@@ -32,11 +32,17 @@ to quickly create a Cobra application.`,
 			return
 		}
 
+		currId, err := queries.GetSelectedProject(ctx)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		var reqList []db.Request
 		if All {
 			reqList, err = queries.ListAllRequests(ctx)
 		} else {
-			reqList, err = queries.ListProjectRequests(ctx, 1)
+			reqList, err = queries.ListProjectRequests(ctx, currId)
 		}
 
 		for _, r := range reqList {
