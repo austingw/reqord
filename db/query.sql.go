@@ -105,6 +105,18 @@ func (q *Queries) GetProject(ctx context.Context, name string) (Project, error) 
 	return i, err
 }
 
+const getProjectById = `-- name: GetProjectById :one
+SELECT id, name, created_at FROM projects
+WHERE id = ? LIMIT 1
+`
+
+func (q *Queries) GetProjectById(ctx context.Context, id int64) (Project, error) {
+	row := q.db.QueryRowContext(ctx, getProjectById, id)
+	var i Project
+	err := row.Scan(&i.ID, &i.Name, &i.CreatedAt)
+	return i, err
+}
+
 const getRequest = `-- name: GetRequest :one
 SELECT id, project_id, name, curl, method, url, headers, body, created_at, updated_at FROM requests
 WHERE project_id = ? AND name = ? LIMIT 1

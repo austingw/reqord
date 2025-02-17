@@ -42,6 +42,10 @@ ORDER BY name;
 SELECT * FROM projects
 WHERE name = ? LIMIT 1;
 
+-- name: GetProjectById :one
+SELECT * FROM projects
+WHERE id = ? LIMIT 1;
+
 -- name: CreateProject :one
 INSERT INTO projects (name) VALUES (?)
 RETURNING *;
